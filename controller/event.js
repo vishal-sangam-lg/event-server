@@ -1,19 +1,27 @@
 const Event = require("../models/event");
 
 exports.addEvent = (req, res, next) => {
-    const data = req.body.data;
-    const id = data.contact + data.category + data.name;
+    const name = req.body.name;
+    const poster = req.body.poster;
+    const tags = req.body.tags;
+    const category = req.body.category;
+    const description = req.body.description;
+    const location = req.body.location;
+    const whocanjoin = req.body.whocanjoin;
+    const limit = req.body.limit;
+    const contact = req.body.contact;
+    const id = contact + category + name;
     const event = new Event({
         eventId: id,
-        eName: data.name,
-        ePoster: data.poster,
-        eTags: data.tags,
-        eCategory: data.category,
-        eDescription: data.description,
-        eLocation: data.location,
-        eWhoCanJoin: data.whocanjoin,
-        eLimit: data.limit,
-        eContact: data.contact
+        eName: name,
+        ePoster: poster,
+        eTags: tags,
+        eCategory: category,
+        eDescription: description,
+        eLocation: location,
+        eWhoCanJoin: whocanjoin,
+        eLimit: limit,
+        eContact: contact
     });
     Event.findOne({eventId: id}).then((result) => {
         if(result) {
@@ -24,4 +32,9 @@ exports.addEvent = (req, res, next) => {
             .catch((err) => console.log(err))
         }
     })
+}
+
+exports.getAllEvents = async (req, res, next) => {
+    const allEvents = await Event.find();
+    res.send(allEvents);
 }
